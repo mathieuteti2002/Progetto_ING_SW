@@ -65,10 +65,16 @@ import javax.swing.GroupLayout.Alignment;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.GridBagLayout;
+import javax.swing.SpringLayout;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class GUI_bibliotecaAdmin extends JFrame {
 
 	private JPanel contentPane;
+	
 	private JTextField txt_isbn;
 	private JTextField txt_titolo;
 	private JTextField txt_autore;
@@ -421,9 +427,13 @@ public class GUI_bibliotecaAdmin extends JFrame {
                 
                 JButton imageLabel = new JButton(new ImageIcon(original.getImage().getScaledInstance(w, maxH, java.awt.Image.SCALE_SMOOTH)));
                 imageLabel.setBounds(0, 0, w, maxH);
+                //imageLabel.setText(libro.getTitolo());
                 imagePanel.add(imageLabel);
                 imageLabel.setBackground(new Color(240,240,240));
-                //imageLabel.set;
+                
+                JLabel lbTitolo = new JLabel(libro.getTitolo(), SwingConstants.CENTER);
+                imagePanel.add(lbTitolo, BorderLayout.SOUTH);
+                
                 imageLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
