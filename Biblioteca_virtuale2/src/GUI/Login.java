@@ -110,23 +110,6 @@ public class Login extends JFrame {
 	public Login() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 809, 397);
-		contentPane = new JPanel();
-		contentPane.addMouseMotionListener(new MouseMotionAdapter() {
-			int posX=0,posY=0;
-			/*public void mousePressed(MouseEvent e)
-			{
-				posX=e.getX();
-				posY=e.getY();
-			}
-			public void mouseDragged(MouseEvent evt)
-		    {
-				//sets frame position when mouse dragged			
-				setLocation (evt.getXOnScreen()-posX,evt.getYOnScreen()-posY);
-							
-		    }*/
-			
-		
-		});
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		contentPane.setBackground(new Color(222, 184, 135));
