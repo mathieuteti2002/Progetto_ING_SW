@@ -61,11 +61,26 @@ public class Catalogo {
 	    }
 	}
 
-	public void ordinaPerTitolo() {
-        Collections.sort(lista_libri, new Comparator<Libro>() {
+	public void ordinaPerTitolo(Libro l) {
+       /* Collections.sort(lista_libri, new Comparator<Libro>() {
             @Override
             public int compare(Libro libro1, Libro libro2) {
                 return libro1.getTitolo().compareToIgnoreCase(libro2.getTitolo());
+            }
+        });*/
+		String titoloCercato =l.getTitolo();
+        // Ordina la lista con un Comparator personalizzato
+        Collections.sort(this.lista_libri, new Comparator<Libro>() {
+            @Override
+            public int compare(Libro libro1, Libro libro2) {
+                // Metti il libro cercato in cima
+                if (titoloCercato.equalsIgnoreCase(libro1.getTitolo())) {
+                    return -1; // libro1 viene prima di libro2
+                } else if (titoloCercato.equalsIgnoreCase(libro2.getTitolo())) {
+                    return 1; // libro2 viene prima di libro1
+                } else {
+                    return libro1.getTitolo().compareToIgnoreCase(libro2.getTitolo());
+                }
             }
         });
     }

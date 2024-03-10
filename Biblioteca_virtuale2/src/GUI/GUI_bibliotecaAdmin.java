@@ -321,9 +321,10 @@ public class GUI_bibliotecaAdmin extends JFrame {
       			txt_anno_pub.setText("");
       			txt_autore.setText("");
       			txt_genere.setText("");
-      			txt_img.setText("");
+      			txt_img2.setText("");
       			txt_qt_disp.setText("");
       			txt_titolo.setText("");
+      			lb_img.setText("");
 //////////////////////////////RICARICO LA LISTA PER VEDERLA AGGIORNATA////////////////////////
 				try {
 					Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
@@ -358,9 +359,10 @@ public class GUI_bibliotecaAdmin extends JFrame {
 //////////////////////////////RICARICO LA LISTA PER VEDERLA AGGIORNATA////////////////////////
 					nuovocatalogo.ricarica(nuovolibro);
 					try {
-						
+						nuovocatalogo.ordinaPerTitolo(nuovolibro);
 						Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
 					      JOptionPane.showMessageDialog(null, "Update riuscito correttamente");
+					textFieldAnno.setText("");textFieldAutore.setText("");textFieldGenere.setText("");textFieldISBN.setText("");textFieldQtaDisp.setText("");textFieldTitolo.setText("");txt_img.setText("");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -513,6 +515,7 @@ public class GUI_bibliotecaAdmin extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				text_cerca.setText("");
 			}
 		});
 		
@@ -540,61 +543,10 @@ public class GUI_bibliotecaAdmin extends JFrame {
 				else JOptionPane.showMessageDialog(null,"Selezionare un libro da eliminare dal catalogo");	
 			}
 		});
-		/*BottoneUpdate.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
-				if(table.getSelectedRowCount()==1)
-				{
-					//Se una singola riga è selezionata allora fa update
-					String txtISBN=textFieldISBN.getText();
-					String txtTitolo=textFieldTitolo.getText();
-					String txtAutore=textFieldAutore.getText();
-					int txtQta=Integer.parseInt(textFieldQtaDisp.getText());
-					String txtGenere=textFieldGenere.getText();
-					int txtAnno=Integer.parseInt(textFieldAnno.getText());
-					String txtimg=txt_img.getText();
-					//Settiamo i valori aggiornati nella riga della tabella
-					upd.update(txtISBN, txtTitolo, txtAutore, txtQta, txtGenere, txtAnno,txtimg);
-					tblModel.setValueAt(txtISBN, table.getSelectedRow(),0);
-					tblModel.setValueAt(txtTitolo, table.getSelectedRow(),1);
-					tblModel.setValueAt(txtAutore, table.getSelectedRow(),2);
-					tblModel.setValueAt(txtQta, table.getSelectedRow(),3);
-					tblModel.setValueAt(txtGenere, table.getSelectedRow(),4);
-					tblModel.setValueAt(txtAnno, table.getSelectedRow(),5);
-					
-					//Messaggio di Update
-					JOptionPane.showMessageDialog(null, "Update andato con successo!");
-					
-				}
-				else
-				{
-					if(table.getRowCount()==0)
-					{
-						//Table vuota
-						JOptionPane.showMessageDialog(null, "La table è vuota!");
-					}
-					else
-					{
-						//Table non selezionata 
-						JOptionPane.showMessageDialog(null, "Seleziona una Riga!");
-					}
-				}
-				
-			}
-		});*/		
-		
-		
+	
 		btn_new_libro.setBounds(215, 227, 96, 21);
 		panel_1.add(btn_new_libro);
-		
-		
-		
-		
-		
-	
-	
-		
+			
 	}
 	
 	////////////////////////////////////////// RICARICA ///////////////////////////////////////
@@ -609,7 +561,6 @@ public class GUI_bibliotecaAdmin extends JFrame {
         scrollPane.setViewportView(imagePanel);
         imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
         // Carica i libri nella lista
-		nuovocatalogo.ordinaPerTitolo();
             for (Libro l : nuovocatalogo.lista_libri) {
             	ImageIcon original=new ImageIcon(l.getCopertina());
                 int maxH=100;
@@ -674,7 +625,6 @@ public class GUI_bibliotecaAdmin extends JFrame {
 	        scrollPane.setViewportView(imagePanel);
 	        imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
 	        // Carica i libri nella lista
-    		nuovocatalogo.ordinaPerTitolo();
 	            for (Libro l : nuovocatalogo.lista_libri) {
 	            	ImageIcon original=new ImageIcon(l.getCopertina());
 	                int maxH=100;
