@@ -1,5 +1,7 @@
 package Classi;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,6 +49,7 @@ public class Catalogo {
 	        iterator.remove();
 	    }
 	}
+	
 	public void ricarica(Libro l_new) {
 	    List<Libro> copiaLista = new ArrayList<>(lista_libri);
 
@@ -58,6 +61,15 @@ public class Catalogo {
 	    }
 	}
 
+	public void ordinaPerTitolo() {
+        Collections.sort(lista_libri, new Comparator<Libro>() {
+            @Override
+            public int compare(Libro libro1, Libro libro2) {
+                return libro1.getTitolo().compareToIgnoreCase(libro2.getTitolo());
+            }
+        });
+    }
+	
 	public Libro cerca_libro(String titolo) throws LibroNonTrovatoException { //ricerca per Titolo
 		for(Libro l:lista_libri) {
 			if(l.getTitolo().equals(titolo))

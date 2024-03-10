@@ -90,6 +90,10 @@ public class Libro {
 		this.copertina=cop;
 	}
 
+	public Libro() {
+		// TODO Auto-generated constructor stub
+	}
+
 	
 	
     
