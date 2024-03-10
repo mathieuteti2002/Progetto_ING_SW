@@ -33,8 +33,8 @@ public class UpdateDatabase{
 			pstmt.setInt(3, quantitadisponibile);
 			pstmt.setString(4, genere);
 			pstmt.setInt(5, annodipubblicazione);
-			pstmt.setString(6, ISBN);
-			pstmt.setString(7, copertina);
+			pstmt.setString(6, copertina);
+			pstmt.setString(7, ISBN);
 
             // update 
 			pstmt.executeUpdate();

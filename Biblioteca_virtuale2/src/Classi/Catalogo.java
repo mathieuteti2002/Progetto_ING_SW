@@ -1,5 +1,6 @@
 package Classi;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import Eccezioni.LibroNonTrovatoException;
@@ -30,7 +31,7 @@ public class Catalogo {
 		}
 		else 
 		{
-			System.out.println("Libro gi√† presente");
+			System.out.println("Libro gi‡ presente");
 			return;
 		}
 	}
@@ -38,7 +39,25 @@ public class Catalogo {
 	public void rimuovi_libro(Libro l) { //tolgo un libro
 		lista_libri.remove(l);
 	}
-	
+	public void rimuovi_tutto() {
+	    Iterator<Libro> iterator = lista_libri.iterator();
+	    
+	    while (iterator.hasNext()) {
+	        Libro libro = iterator.next();
+	        iterator.remove();
+	    }
+	}
+	public void ricarica(Libro l_new) {
+	    List<Libro> copiaLista = new ArrayList<>(lista_libri);
+
+	    for (Libro libro : copiaLista) {
+	        if (l_new.getISBN().equals(libro.getISBN())) {
+	            lista_libri.remove(libro);
+	            this.aggiungi_libro(l_new);
+	        }
+	    }
+	}
+
 	public Libro cerca_libro(String titolo) throws LibroNonTrovatoException { //ricerca per Titolo
 		for(Libro l:lista_libri) {
 			if(l.getTitolo().equals(titolo))
