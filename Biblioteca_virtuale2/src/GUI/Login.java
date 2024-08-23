@@ -108,12 +108,24 @@ public class Login extends JFrame {
 	
 	
 	public Login() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 809, 397);
-		contentPane.setBackground(Color.WHITE);
+		
+
+		// Inizializza il contentPane
+        contentPane = new JPanel();
+        contentPane.setBackground(Color.WHITE);  // Imposta il colore di sfondo
+        contentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));  // Imposta il bordo
+        contentPane.setLayout(null);  // Imposta il layout
+        
+     // Imposta il contentPane come il pannello principale del JFrame
+        setContentPane(contentPane);
+
+        contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
 		contentPane.setBackground(new Color(222, 184, 135));
-
+        
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
