@@ -78,30 +78,12 @@ import com.jgoodies.forms.layout.RowSpec;
 public class GUI_bibliotecaUtente2 extends JFrame {
 
 	private JPanel contentPane;
-	
-	private JTextField txt_isbn;
-	private JTextField txt_titolo;
-	private JTextField txt_autore;
-	private JTextField txt_qt_disp;
-	private JTextField txt_genere;
-	private JTextField txt_anno_pub;
 	//private JTextField txt_img;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField text_cerca;
-	private JTextField textFieldISBN;
-	private JTextField textFieldTitolo;
-	private JTextField textFieldAutore;
-	private JTextField textFieldQtaDisp;
-	private JTextField textFieldGenere;
-	private JTextField textFieldAnno;
-	private JLabel lblNewLabel_7;
-	private JLabel lblNewLabel_8;
-	private JLabel lblNewLabel_9;
-	private JLabel lblNewLabel_10;
-	private JLabel lblNewLabel_11;
-	private JTextField txt_img;
-	
+	private JLabel nome_libro = new JLabel("");
+
 	/**
 	 * Launch the application.
 	 */
@@ -132,7 +114,7 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		Catalogo nuovocatalogo=new Catalogo();
 		JScrollPane scrollPane = new JScrollPane();
 		JPanel imagePanel = new JPanel();
-		
+
 		
 		InserimentoDatabase ins = new InserimentoDatabase();
 		
@@ -160,38 +142,8 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		
 
 		JPanel panel_1 = new JPanel();
-		tabbedPane.addTab("Inserisci nuovo Libro", null, panel_1, null);
+		tabbedPane.addTab("Libri Prenotati", null, panel_1, null);
 		panel_1.setLayout(null);
-		
-		txt_isbn = new JTextField();
-		txt_isbn.setBounds(215, 9, 96, 19);
-		panel_1.add(txt_isbn);
-		txt_isbn.setColumns(10);
-		
-		txt_titolo = new JTextField();
-		txt_titolo.setBounds(215, 42, 96, 19);
-		panel_1.add(txt_titolo);
-		txt_titolo.setColumns(10);
-		
-		txt_autore = new JTextField();
-		txt_autore.setBounds(215, 74, 96, 19);
-		panel_1.add(txt_autore);
-		txt_autore.setColumns(10);
-		
-		txt_qt_disp = new JTextField();
-		txt_qt_disp.setBounds(215, 105, 96, 19);
-		panel_1.add(txt_qt_disp);
-		txt_qt_disp.setColumns(10);
-		
-		txt_genere = new JTextField();
-		txt_genere.setBounds(215, 134, 96, 19);
-		panel_1.add(txt_genere);
-		txt_genere.setColumns(10);
-		
-		txt_anno_pub = new JTextField();
-		txt_anno_pub.setBounds(215, 163, 96, 19);
-		panel_1.add(txt_anno_pub);
-		txt_anno_pub.setColumns(10);
 		
 		JLabel lb_img = new JLabel("");
 		lb_img.setBounds(384, 42, 262, 185);
@@ -199,36 +151,6 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		
 		
 		Setta_button(nuovocatalogo, panel,scrollPane,imagePanel);
-		
-		
-		
-		
-//---------------------------------CARICO IMMAGINE-----------------------	
-		//JButton btnSfoglia = new JButton("Sfoglia...");
-		JButton btnSfoglia = new JButton("Inserisci Copertina");
-		btnSfoglia.setBounds(441, 8, 124, 21);
-		panel_1.add(btnSfoglia);
-        btnSfoglia.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // Crea un JFileChooser
-                JFileChooser fileChooser = new JFileChooser();
-
-                // Imposta il tipo di file selezionabile (immagini in questo caso)
-                fileChooser.setFileFilter(new FileNameExtensionFilter("Immagini", "jpg", "jpeg", "png", "gif"));
-
-                // Mostra il JFileChooser
-                int result = fileChooser.showOpenDialog(null);
-
-                // Verifica se l'utente ha selezionato un file
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    // Ottieni il percorso del file selezionato
-                   String percorsoImmagine = fileChooser.getSelectedFile().getPath();
-                   txt_img.setText(percorsoImmagine);
-           		lb_img.setIcon(new ImageIcon(txt_img.getText()));
-                //lb_img.setSize(384, 185); // Specifica le dimensioni desiderate
-                }
-            }
-        });
 
         // Aggiungi il pulsante al tuo layout
        // getContentPane().add(btnSfoglia);
@@ -239,31 +161,6 @@ public class GUI_bibliotecaUtente2 extends JFrame {
         setVisible(true);
 		
 		
-		JLabel lblNewLabel = new JLabel("ISBN");
-		lblNewLabel.setBounds(81, 13, 45, 13);
-		panel_1.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Titolo");
-		lblNewLabel_1.setBounds(81, 43, 45, 16);
-		panel_1.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("Autore");
-		lblNewLabel_2.setBounds(81, 77, 45, 13);
-		panel_1.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Quantit\u00E0 disponibile");
-		lblNewLabel_3.setBounds(81, 108, 107, 13);
-		panel_1.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("Genere");
-		lblNewLabel_4.setBounds(81, 137, 45, 13);
-		panel_1.add(lblNewLabel_4);
-		
-		JLabel lblNewLabel_5 = new JLabel("Anno pubblicazione");
-		lblNewLabel_5.setBounds(81, 164, 107, 13);
-		panel_1.add(lblNewLabel_5);
-		
-		
 	
 		Panel panel_2 = new Panel();
 		panel_2.setBounds(429, 0, 343, 266);
@@ -271,135 +168,28 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		panel_2.setLayout(null);
 		
 		JButton BottoneCerca = new JButton("Cerca per Titolo");
-		BottoneCerca.setBounds(197, 206, 131, 23);
+		BottoneCerca.setBounds(197, 160, 131, 23);
 		panel_2.add(BottoneCerca);
-		
-		//---------------------------INSERISCO IMMAGINI + UPDATE ---------------------------------
-				//Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
-      //------------------------BOTTONE INSERISCI NEW LIBRO ------------------------------------
-		
-      		JButton btn_new_libro = new JButton("Inserisci");
-      		
-      		btn_new_libro.addActionListener(new ActionListener() {
-      	public void actionPerformed(ActionEvent e) {
-       		if(Controllo_text(txt_isbn, txt_autore, txt_anno_pub, txt_genere, txt_qt_disp, txt_titolo, txt_img)) {
-       			String sourceImg=txt_img.getText();
-      			String destImg="src/Immagine";
-                  String nomeFile = new File(sourceImg).getName();
-      			 // Crea la cartella se non esiste gi�
-                  File cartella = new File(sourceImg);
-                  if (!cartella.exists()) {
-                      cartella.mkdirs();
-                  }
-                  // Copia l'immagine nella cartella di destinazione
-                  Path origine = Path.of(sourceImg);
-                  Path destinazione = Path.of(destImg, nomeFile);
-                  try {
-      				Files.copy(origine, destinazione, StandardCopyOption.REPLACE_EXISTING);
-      			} catch (IOException e2) {
-      				// TODO Auto-generated catch block
-      				e2.printStackTrace();
-      			}
-                  Libro l=new Libro(txt_isbn.getText(),txt_titolo.getText(), txt_autore.getText(),Integer.parseInt(txt_qt_disp.getText()),txt_genere.getText(),Integer.parseInt(txt_anno_pub.getText()),
-      					destinazione.toString());
-                  ins.inserimento(txt_isbn.getText(),txt_titolo.getText(), txt_autore.getText(),Integer.parseInt(txt_qt_disp.getText()),txt_genere.getText(),Integer.parseInt(txt_anno_pub.getText()),
-      					destinazione.toString());
-                  nuovocatalogo.aggiungi_libro(l);
-      			JOptionPane.showMessageDialog(null, "Libro inserito correttamente");
-      			txt_isbn.setText("");
-      			txt_anno_pub.setText("");
-      			txt_autore.setText("");
-      			txt_genere.setText("");
-      			txt_qt_disp.setText("");
-      			txt_titolo.setText("");
-      			lb_img.setText("");
-//////////////////////////////RICARICO LA LISTA PER VEDERLA AGGIORNATA////////////////////////
-				try {
-					Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-//////////////////////////////RICARICO LA LISTA PER VEDERLA AGGIORNATA////////////////////////
-      				}
-      			}
-      		});
         
         
         
 //---------------------------INSERISCO IMMAGINI + UPDATE---------------------------------
 		text_cerca = new JTextField();
-		text_cerca.setBounds(10, 208, 188, 20);
+		text_cerca.setBounds(10, 162, 188, 20);
 		panel_2.add(text_cerca);
 		text_cerca.setColumns(10);
 		
-		textFieldTitolo = new JTextField();
-		textFieldTitolo.setEditable(false);
-		textFieldTitolo.setBounds(242, 24, 86, 20);
-		panel_2.add(textFieldTitolo);
-		textFieldTitolo.setColumns(10);
+		JButton btnNewButton = new JButton("Prenota Libro");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNewButton.setBounds(197, 75, 131, 42);
+		panel_2.add(btnNewButton);
 		
-		textFieldAutore = new JTextField();
-		textFieldAutore.setEditable(false);
-		textFieldAutore.setBounds(78, 55, 86, 20);
-		panel_2.add(textFieldAutore);
-		textFieldAutore.setColumns(10);
-		
-		textFieldQtaDisp = new JTextField();
-		textFieldQtaDisp.setEditable(false);
-		textFieldQtaDisp.setBounds(242, 55, 86, 20);
-		panel_2.add(textFieldQtaDisp);
-		textFieldQtaDisp.setColumns(10);
-		
-		textFieldGenere = new JTextField();
-		textFieldGenere.setEditable(false);
-		textFieldGenere.setBounds(78, 86, 86, 20);
-		panel_2.add(textFieldGenere);
-		textFieldGenere.setColumns(10);
-		
-		textFieldAnno = new JTextField();
-		textFieldAnno.setEditable(false);
-		textFieldAnno.setBounds(242, 86, 86, 20);
-		panel_2.add(textFieldAnno);
-		textFieldAnno.setColumns(10);
-		
-		lblNewLabel_7 = new JLabel("Autore");
-		lblNewLabel_7.setBounds(29, 58, 46, 14);
-		panel_2.add(lblNewLabel_7);
-		
-		lblNewLabel_8 = new JLabel("Genere");
-		lblNewLabel_8.setBounds(29, 89, 46, 14);
-		panel_2.add(lblNewLabel_8);
-		
-		lblNewLabel_9 = new JLabel("Titolo");
-		lblNewLabel_9.setBounds(185, 27, 46, 14);
-		panel_2.add(lblNewLabel_9);
-		
-		lblNewLabel_10 = new JLabel("Qta. Disp");
-		lblNewLabel_10.setBounds(186, 58, 46, 14);
-		panel_2.add(lblNewLabel_10);
-		
-		lblNewLabel_11 = new JLabel("Anno di Pubblicazione");
-		lblNewLabel_11.setBounds(185, 89, 58, 14);
-		panel_2.add(lblNewLabel_11);
-		
-		textFieldISBN = new JTextField();
-		textFieldISBN.setEditable(false);
-		textFieldISBN.setBounds(78, 24, 86, 20);
-		panel_2.add(textFieldISBN);
-		textFieldISBN.setColumns(10);
-		
-		txt_img = new JTextField();
-		txt_img.setEditable(false);
-		txt_img.setEnabled(false);
-		txt_img.setVisible(false);
-		txt_img.setBounds(215, 192, 96, 19);
-		panel_1.add(txt_img);
-		txt_img.setColumns(10);
-		
-		JLabel lblNewLabel_6 = new JLabel("ISBN");
-		lblNewLabel_6.setBounds(29, 26, 46, 17);
-		panel_2.add(lblNewLabel_6);
+		nome_libro.setBounds(10, 75, 177, 27);
+		panel_2.add(nome_libro);
 		
 		JLabel lblNewLabel_13 = new JLabel("Titolo");
 		lblNewLabel_13.setBounds(278, 0, 45, 13);
@@ -420,9 +210,6 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 				text_cerca.setText("");
 			}
 		});
-	
-		btn_new_libro.setBounds(215, 227, 96, 21);
-		panel_1.add(btn_new_libro);
 			
 	}
 	
@@ -450,22 +237,7 @@ public class GUI_bibliotecaUtente2 extends JFrame {
                 imagePanel.add(lbTitolo, BorderLayout.SOUTH);
                
                 
-                imageButton.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                    	textFieldISBN.setText(l.getISBN());
-                    	textFieldAutore.setText(l.getAutore());
-                    	textFieldAnno.setText(Integer.toString(l.getAnnoPubblicazione()));
-                    	textFieldGenere.setText(l.getGenere());
-                    	textFieldQtaDisp.setText(Integer.toString(l.getQuantitaDisponibile()));
-                    	textFieldTitolo.setText(l.getTitolo());
-                    	textFieldAutore.setEditable(true);
-                    	textFieldAnno.setEditable(true);
-                    	textFieldGenere.setEditable(true);
-                    	textFieldQtaDisp.setEditable(true);
-                    	textFieldTitolo.setEditable(true);
-                    }
-                }); 
+                
 			}
             /*IN CASO DI PROBLEMI DI AGGIORNAMENTO DELLA GUI, COSI SI FORZA
              * panel.revalidate();
@@ -490,7 +262,6 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 	                        obj2[i][6].toString()
 	                );
 	                nuovocatalogo.aggiungi_libro(libro);
-	              
 	        } 
 	        }
 	        scrollPane.getHorizontalScrollBar().setUnitIncrement(20);
@@ -512,21 +283,12 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 	                JLabel lbTitolo = new JLabel(l.getTitolo(), SwingConstants.CENTER);
 	                imagePanel.add(lbTitolo, BorderLayout.SOUTH);
 	                
-	                
+	               
 	                imageButton.addMouseListener(new MouseAdapter() {
 	                    @Override
 	                    public void mouseClicked(MouseEvent e) {
-	                    	textFieldISBN.setText(l.getISBN());
-	                    	textFieldAutore.setText(l.getAutore());
-	                    	textFieldAnno.setText(Integer.toString(l.getAnnoPubblicazione()));
-	                    	textFieldGenere.setText(l.getGenere());
-	                    	textFieldQtaDisp.setText(Integer.toString(l.getQuantitaDisponibile()));
-	                    	textFieldTitolo.setText(l.getTitolo());
-	                    	textFieldAutore.setEditable(true);
-	                    	textFieldAnno.setEditable(true);
-	                    	textFieldGenere.setEditable(true);
-	                    	textFieldQtaDisp.setEditable(true);
-	                    	textFieldTitolo.setEditable(true);
+	                    	nome_libro.setText(l.getTitolo());
+	                    	System.out.println(nome_libro.getText());
 	                    }
 	                });
 				} 
