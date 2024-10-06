@@ -290,7 +290,7 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 	                    	nome_libro.setText(l.getTitolo());
 	                    	System.out.println(nome_libro.getText());
 	                    }
-	                });
+	                }) ;
 				} 
 	}
 	////////////////////////////////////////// RICARICA ///////////////////////////////////////
