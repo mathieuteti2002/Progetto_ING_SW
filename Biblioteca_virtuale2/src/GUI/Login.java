@@ -155,7 +155,7 @@ public class Login extends JFrame {
 					islog.update(textFieldUser.getText(),1);
 					JOptionPane.showMessageDialog(null, "Benvenuto "+textFieldUser.getText()+"!");
 					dispose();
-					GUI_bibliotecaUtente.main(null);
+					GUI_bibliotecaUtente2.main(null);
 				}
 				else if(ricercaPassword(textFieldUser.getText(),textFieldPass.getText())==false)
 				{

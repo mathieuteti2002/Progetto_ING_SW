@@ -31,6 +31,7 @@ import javax.swing.table.TableRowSorter;
 
 import Classi.Catalogo;
 import Classi.Libro;
+import DatabaseCredenziali.UpdateLibriPrenotati;
 import DatabaseLibri.CancellaDatabase;
 import DatabaseLibri.Database;
 import DatabaseLibri.InserimentoDatabase;
@@ -106,6 +107,7 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 	 */
 	public SelezionaTabella sel1=new SelezionaTabella();
 	public SelezionaTabella sel2=new SelezionaTabella();
+	private JTable tablePrenotati;
 
 	public GUI_bibliotecaUtente2() throws SQLException {
 
@@ -114,8 +116,10 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		Catalogo nuovocatalogo=new Catalogo();
 		JScrollPane scrollPane = new JScrollPane();
 		JPanel imagePanel = new JPanel();
+	    SelezionaTabella sel=new SelezionaTabella();
+		UpdateDatabase upd = new UpdateDatabase();
 
-		
+			
 		InserimentoDatabase ins = new InserimentoDatabase();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,19 +140,23 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		tabbedPane.addTab("Consulta Catalogo", null, panel, null);
 		panel.setLayout(null);
 		
-		
-
-		
-		
 
 		JPanel panel_1 = new JPanel();
 		tabbedPane.addTab("Libri Prenotati", null, panel_1, null);
 		panel_1.setLayout(null);
 		
-		JLabel lb_img = new JLabel("");
-		lb_img.setBounds(384, 42, 262, 185);
-		panel_1.add(lb_img);
+		tablePrenotati = new JTable();
+		obj= sel.fillTablePrenotati();
+		tablePrenotati.setModel(new DefaultTableModel(
+				obj,
+				new String[] {
+					"ISBN", "Titolo", "Autore", "Genere", "Anno Pubblicazione", 
+				}
+			));
 		
+			tablePrenotati.setBounds(10, 11, 427, 247);
+			panel_1.add(tablePrenotati);
+			panel.setLayout(null);
 		
 		Setta_button(nuovocatalogo, panel,scrollPane,imagePanel);
 
@@ -180,11 +188,73 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 		text_cerca.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Prenota Libro");
+		table = new JTable();
+		table.setModel(new DefaultTableModel(
+		    new Object[][] {
+		        // Inserisci qui i tuoi dati, oppure lascia vuoto
+		    },
+		    new String[] {
+		        "ISBN", "Titolo", "Autore", "Genere", "Quantità"
+		    }
+		));
+		table.setBounds(10, 11, 427, 247);
+		panel_1.add(table);
+		
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				UpdateLibriPrenotati updpren=new UpdateLibriPrenotati();
+				DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
+				
+				if(table.getSelectedRowCount()==1)
+				{
+					int column1 = 0;
+					int row1 = table.getSelectedRow();
+					int column2 = 3;
+					int row2 = table.getSelectedRow();
+					String ISBN= table.getModel().getValueAt(row1, column1).toString();
+					String val=table.getModel().getValueAt(row2, column2).toString();
+					int qta=Integer.parseInt(val);
+					
+					
+					if(qta<=0 )
+					{
+						JOptionPane.showMessageDialog(null,"Libri Finiti");
+					}
+					else if(doppiaPren(table.getSelectedRow())==true)
+					{
+						qta=qta-1;
+						upd.updateQta(ISBN, qta);
+						tblModel.setValueAt(qta, table.getSelectedRow(),3);
+
+						ISBN=ISBN+",";
+						updpren.update(ISBN, 1);
+						
+						JOptionPane.showMessageDialog(null, "Prenotato con successo!");
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Hai gia prenotato questo libro!");
+					}
+
+				}
+				else
+				{
+					if(table.getRowCount()==0)
+					{
+						//Table vuota
+						JOptionPane.showMessageDialog(null, "La table è vuota!");
+					}
+					else
+					{
+						//Table non selezionata 
+						JOptionPane.showMessageDialog(null, "Seleziona una Riga!");
+					}
+				}
+				
 				
 			}
-		});
+			}
+		);
 		btnNewButton.setBounds(197, 75, 131, 42);
 		panel_2.add(btnNewButton);
 		
@@ -304,6 +374,27 @@ public class GUI_bibliotecaUtente2 extends JFrame {
 					img.getText().isEmpty()))
 				return true;
 			else return false;
+		}
+		public boolean doppiaPren(int riga)
+		{
+			DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
+			DefaultTableModel tblModel2 = (DefaultTableModel)tablePrenotati.getModel();
+			
+			String tblISBN1=tblModel.getValueAt(riga, 0).toString();
+			
+			int i=0;
+			boolean flag=true;
+			
+			while(i<tblModel2.getRowCount())
+			{
+				if(tblISBN1.equals(tblModel2.getValueAt(i, 0)))
+				{
+					flag=false;
+				}
+				i++;
+			}
+			
+			return flag;
 		}
 		
 		
