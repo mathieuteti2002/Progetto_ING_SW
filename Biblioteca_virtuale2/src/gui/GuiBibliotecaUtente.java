@@ -1,29 +1,37 @@
 package gui;
 import java.awt.EventQueue;
+import java.awt.LayoutManager;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.SwingConstants;
 import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.BorderLayout;
+
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import classi.Catalogo;
 import classi.Libro;
-import databasecredenziali.UpdateIsLogged;
-import databasecredenziali.UpdateLibriPrenotati;
+import databaselibri.CancellaDatabase;
 import databaselibri.Database;
 import databaselibri.InserimentoDatabase;
 import databaselibri.SelezionaTabella;
@@ -32,40 +40,47 @@ import databaselibri.UpdateDatabase;
 import java.time.zone.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Panel;
+import java.awt.CardLayout;
+import java.awt.Color;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.GridBagLayout;
+import javax.swing.SpringLayout;
+
 
 public class GuiBibliotecaUtente extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txt_isbn;
-	private JTextField txt_titolo;
-	private JTextField txt_autore;
-	private JTextField txt_qt_disp;
-	private JTextField txt_genere;
-	private JTextField txt_anno_pub;
+	//private JTextField txt_img;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField textField;
-	private JLabel Label;
-	private JButton BottoneCerca;
-	private JTable tablePrenotati;
-	private JButton BottoneEsci;
-	private JLabel LabelUtente;
-	private JLabel lblNewLabel_6;
+	private JTextField text_cerca;
+	private JLabel nome_libro = new JLabel("");
 
 	/**
 	 * Launch the application.
@@ -87,284 +102,223 @@ public class GuiBibliotecaUtente extends JFrame {
 	 * Create the frame.
 	 * @throws SQLException 
 	 */
-	
-	private Connection connect() {
-        // SQLite connection string
-		
-		Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(Database.DB_URL);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
-    }
-	
-	
-	public String trovaloggato()
-	{
-		String sql= "SELECT utente,islogged FROM Account";
-		String user="";
-		try(Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) 
-		{
-			while(rs.next())
-			{
-				if(Integer.parseInt(rs.getString("islogged"))==1)
-				{
-					user=rs.getString("utente");
-				}
-				
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		return user;
-	}
-	
-	public boolean doppiaPren(int riga)
-	{
-		DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
-		DefaultTableModel tblModel2 = (DefaultTableModel)tablePrenotati.getModel();
-		
-		String tblISBN1=tblModel.getValueAt(riga, 0).toString();
-		
-		int i=0;
-		boolean flag=true;
-		
-		while(i<tblModel2.getRowCount())
-		{
-			if(tblISBN1.equals(tblModel2.getValueAt(i, 0)))
-			{
-				flag=false;
-			}
-			i++;
-		}
-		
-		return flag;
-	}
-	
-	
+	public SelezionaTabella sel1=new SelezionaTabella();
+	public SelezionaTabella sel2=new SelezionaTabella();
+
 	public GuiBibliotecaUtente() throws SQLException {
 
 		Object[][] obj;
-		SelezionaTabella sel=new SelezionaTabella();
-		UpdateDatabase upd = new UpdateDatabase();
-		UpdateIsLogged updlog=new UpdateIsLogged();
+		
+		Catalogo nuovocatalogo=new Catalogo();
+		JScrollPane scrollPane = new JScrollPane();
+		JPanel imagePanel = new JPanel();
+
+		
+		InserimentoDatabase ins = new InserimentoDatabase();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 710, 359);
+		setBounds(100, 100, 853, 359);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
+		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 10, 452, 297);
+		tabbedPane.setBounds(10, 10, 806, 309);
 		contentPane.add(tabbedPane);
 
 		JPanel panel = new JPanel();
-		JPanel panel2 = new JPanel();
 		tabbedPane.addTab("Consulta Catalogo", null, panel, null);
-		tabbedPane.addTab("Libri Prenotati", panel2);
-		panel2.setLayout(null);
-		
-		tablePrenotati = new JTable();
-		obj= sel.fillTablePrenotati();
-		
-		tablePrenotati.setModel(new DefaultTableModel(
-			obj,
-			new String[] {
-				"ISBN", "Titolo", "Autore", "Genere", "Anno Pubblicazione", 
-			}
-		));
-		tablePrenotati.setBounds(10, 11, 427, 247);
-		panel2.add(tablePrenotati);
 		panel.setLayout(null);
 		
+		
 
-		txt_isbn = new JTextField();
-		txt_isbn.setBounds(215, 9, 96, 19);
+		
+		
+
+		JPanel panel_1 = new JPanel();
+		tabbedPane.addTab("Libri Prenotati", null, panel_1, null);
+		panel_1.setLayout(null);
+		
+		JLabel lb_img = new JLabel("");
+		lb_img.setBounds(384, 42, 262, 185);
+		panel_1.add(lb_img);
+		
+		
+		Setta_button(nuovocatalogo, panel,scrollPane,imagePanel);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(844, 363);
+        setLocationRelativeTo(null);
+        setVisible(true);
+		
+		
 	
-		txt_isbn.setColumns(10);
+		Panel panel_2 = new Panel();
+		panel_2.setBounds(429, 0, 343, 266);
+		panel.add(panel_2);
+		panel_2.setLayout(null);
 		
-		txt_titolo = new JTextField();
-		txt_titolo.setBounds(215, 42, 96, 19);
-
-		txt_titolo.setColumns(10);
+		JButton BottoneCerca = new JButton("Cerca per Titolo");
+		BottoneCerca.setBounds(197, 160, 131, 23);
+		panel_2.add(BottoneCerca);
+        
+        
+        
+//---------------------------INSERISCO IMMAGINI + UPDATE---------------------------------
+		text_cerca = new JTextField();
+		text_cerca.setBounds(10, 162, 188, 20);
+		panel_2.add(text_cerca);
+		text_cerca.setColumns(10);
 		
-		txt_autore = new JTextField();
-		txt_autore.setBounds(215, 74, 96, 19);
-
-		txt_autore.setColumns(10);
+		JButton btnNewButton = new JButton("Prenota Libro");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNewButton.setBounds(197, 75, 131, 42);
+		panel_2.add(btnNewButton);
 		
-		txt_qt_disp = new JTextField();
-		txt_qt_disp.setBounds(215, 105, 96, 19);
-
-		txt_qt_disp.setColumns(10);
+		nome_libro.setBounds(10, 75, 177, 27);
+		panel_2.add(nome_libro);
 		
-		txt_genere = new JTextField();
-		txt_genere.setBounds(215, 134, 96, 19);
+		JLabel lblNewLabel_13 = new JLabel("Titolo");
+		lblNewLabel_13.setBounds(278, 0, 45, 13);
+		panel.add(lblNewLabel_13);
 		
-		txt_genere.setColumns(10);
-		
-		txt_anno_pub = new JTextField();
-		txt_anno_pub.setBounds(215, 163, 96, 19);
-	
-		txt_anno_pub.setColumns(10);
-		
-		JLabel lblNewLabel = new JLabel("ISBN");
-		lblNewLabel.setBounds(81, 13, 45, 13);
-	
-		
-		JLabel lblNewLabel_1 = new JLabel("Titolo");
-		lblNewLabel_1.setBounds(81, 43, 45, 16);
-	
-		
-		JLabel lblNewLabel_2 = new JLabel("Autore");
-		lblNewLabel_2.setBounds(81, 77, 45, 13);
-
-		
-		JLabel lblNewLabel_3 = new JLabel("Quantit\u00E0 disponibile");
-		lblNewLabel_3.setBounds(81, 108, 107, 13);
-
-		
-		JLabel lblNewLabel_4 = new JLabel("Genere");
-		lblNewLabel_4.setBounds(81, 137, 45, 13);
-	
-		
-		JLabel lblNewLabel_5 = new JLabel("Anno pubblicazione");
-		lblNewLabel_5.setBounds(81, 164, 107, 13);
-		//tableModel = (DefaultTableModel) table.getModel();
-		
-		BottoneCerca = new JButton("Cerca");
 		BottoneCerca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
-				TableRowSorter<DefaultTableModel> obj = new TableRowSorter<>(tblModel);
-				table.setRowSorter(obj);
-				obj.setRowFilter(RowFilter.regexFilter(textField.getText()));
-	
-			}
-		});
-		BottoneCerca.setBounds(520, 190, 89, 23);
-		contentPane.add(BottoneCerca);
-		
-		
-
-		JButton BottonePrestito = new JButton("Prenota Libro");
-		BottonePrestito.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				UpdateLibriPrenotati updpren=new UpdateLibriPrenotati();
-				DefaultTableModel tblModel = (DefaultTableModel)table.getModel();
-				
-				if(table.getSelectedRowCount()==1)
-				{
-					int column1 = 0;
-					int row1 = table.getSelectedRow();
-					int column2 = 3;
-					int row2 = table.getSelectedRow();
-					String ISBN= table.getModel().getValueAt(row1, column1).toString();
-					String val=table.getModel().getValueAt(row2, column2).toString();
-					int qta=Integer.parseInt(val);
-					
-					
-					if(qta<=0 )
-					{
-						JOptionPane.showMessageDialog(null,"Libri Finiti");
-					}
-					else if(doppiaPren(table.getSelectedRow())==true)
-					{
-						qta=qta-1;
-						upd.updateQta(ISBN, qta);
-						tblModel.setValueAt(qta, table.getSelectedRow(),3);
-
-						ISBN=ISBN+",";
-						updpren.update(ISBN, 1);
-						
-						JOptionPane.showMessageDialog(null, "Prenotato con successo!");
-					}
-					else
-					{
-						JOptionPane.showMessageDialog(null, "Hai gia prenotato questo libro!");
-					}
-
+				cercaLibro(nuovocatalogo);
+				for(Libro l : nuovocatalogo.getLista_libri())
+					System.out.println(l.getTitolo());
+				try {
+					Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
+					JOptionPane.showMessageDialog(null, "Catalogo ordinato in base al filtro");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				else
-				{
-					if(table.getRowCount()==0)
-					{
-						//Table vuota
-						JOptionPane.showMessageDialog(null, "La table � vuota!");
-					}
-					else
-					{
-						//Table non selezionata 
-						JOptionPane.showMessageDialog(null, "Seleziona una Riga!");
-					}
-				}
-				
-				
+				text_cerca.setText("");
 			}
 		});
-		BottonePrestito.setBounds(472, 37, 149, 23);
-		BottonePrestito.setVisible(false);
-		contentPane.add(BottonePrestito);
-		
-		
-		table = new JTable();
-		table.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				BottonePrestito.setVisible(true);
-	
-			}
-		});
-		obj= sel.fillTable();
-		
-		table.setModel(new DefaultTableModel(
-			obj,
-			new String[] {
-				"ISBN", "Titolo", "Autore", "Quantit\u00E0 disponibile", "Genere", "Anno Pubblicazione", 
-			}
-		));
-		table.setBounds(10, 11, 427, 250);
-		panel.add(table);
-		
-		textField = new JTextField();
-		textField.setBounds(510, 159, 174, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		Label = new JLabel("Cerca");
-		Label.setBounds(472, 162, 46, 14);
-		contentPane.add(Label);
-		
-		LabelUtente = new JLabel(updlog.utente());
-		LabelUtente.setBounds(574, 16, 83, 14);
-		contentPane.add(LabelUtente);
-		
-		BottoneEsci = new JButton("Esci");
-		BottoneEsci.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String nome = updlog.utente();
-				updlog.update(nome,0);
-				LabelUtente.setText(nome);
-				dispose();
-				Login.main(null);
-			}
-		});
-		BottoneEsci.setBounds(595, 284, 89, 23);
-		contentPane.add(BottoneEsci);
-		
-		lblNewLabel_6 = new JLabel("Account:");
-		lblNewLabel_6.setBounds(520, 16, 71, 14);
-		contentPane.add(lblNewLabel_6);
-		
-		
-		
-		
-		
+			
 	}
+	
+	////////////////////////////////////////// RICARICA ///////////////////////////////////////
+	
+	public void Ricarica(Catalogo nuovocatalogo,JPanel panel, JScrollPane scrollPane,JPanel imagePanel ) throws SQLException {
+		imagePanel.removeAll();
+		scrollPane.getHorizontalScrollBar().setUnitIncrement(20);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+        scrollPane.setBounds(10, 10, 397, 250);
+        panel.add(scrollPane);
+        // Inizializza un pannello per contenere le etichette delle immagini
+        scrollPane.setViewportView(imagePanel);
+        imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
+        // Carica i libri nella lista
+            for (Libro l : nuovocatalogo.lista_libri) {
+            	ImageIcon original=new ImageIcon(l.getCopertina());
+                int maxH=100;
+                int w = original.getIconWidth()*maxH/original.getIconHeight();
+                JButton imageButton = new JButton(new ImageIcon(original.getImage().getScaledInstance(w, maxH, java.awt.Image.SCALE_SMOOTH)));
+                imageButton.setBounds(0, 0, w, maxH);
+                imagePanel.add(imageButton);
+                imageButton.setBackground(new Color(240,240,240));   
+                JLabel lbTitolo = new JLabel(l.getTitolo(), SwingConstants.CENTER);
+                imagePanel.add(lbTitolo, BorderLayout.SOUTH);
+               
+                
+                
+			}
+	}
+	
+	public void Setta_button(Catalogo nuovocatalogo,JPanel panel, JScrollPane scrollPane,JPanel imagePanel) throws SQLException {
+		SelezionaTabella sel=new SelezionaTabella();
+		imagePanel.removeAll();
+		 Object[][] obj2 = sel.fillTable();
+		  for (int i = 0; i < obj2.length; i++) {
+	            if (obj2[i][0] != null) {
+	                Libro libro = new Libro(
+	                        obj2[i][0].toString(),
+	                        obj2[i][1].toString(),
+	                        obj2[i][2].toString(),
+	                        Integer.parseInt(obj2[i][3].toString()),
+	                        obj2[i][4].toString(),
+	                        Integer.parseInt(obj2[i][5].toString()),
+	                        obj2[i][6].toString()
+	                );
+	                nuovocatalogo.aggiungi_libro(libro);
+	        } 
+	        }
+	        scrollPane.getHorizontalScrollBar().setUnitIncrement(20);
+	        scrollPane.getVerticalScrollBar().setUnitIncrement(20);
+	        scrollPane.setBounds(10, 10, 397, 250);
+	        panel.add(scrollPane);
+	        // Inizializza un pannello per contenere le etichette delle immagini
+	        scrollPane.setViewportView(imagePanel);
+	        imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
+	        // Carica i libri nella lista
+	            for (Libro l : nuovocatalogo.lista_libri) {
+	            	ImageIcon original=new ImageIcon(l.getCopertina());
+	                int maxH=100;
+	                int w = original.getIconWidth()*maxH/original.getIconHeight();
+	                JButton imageButton = new JButton(new ImageIcon(original.getImage().getScaledInstance(w, maxH, java.awt.Image.SCALE_SMOOTH)));
+	                imageButton.setBounds(0, 0, w, maxH);
+	                imagePanel.add(imageButton);
+	                imageButton.setBackground(new Color(240,240,240));   
+	                JLabel lbTitolo = new JLabel(l.getTitolo(), SwingConstants.CENTER);
+	                imagePanel.add(lbTitolo, BorderLayout.SOUTH);
+	                
+	               
+	                imageButton.addMouseListener(new MouseAdapter() {
+	                    @Override
+	                    public void mouseClicked(MouseEvent e) {
+	                    	nome_libro.setText(l.getTitolo());
+	                    	System.out.println(nome_libro.getText());
+	                    }
+	                }) ;
+				} 
+	}
+	////////////////////////////////////////// RICARICA ///////////////////////////////////////
+	
+	
+	////////////////////////////////////////// CONTROLLO TEXT ///////////////////////////////////////
+		public boolean Controllo_text(JTextField ISBN,JTextField au,JTextField anno,
+				JTextField gen,JTextField qta,JTextField tit,JTextField img) {
+			if(!(ISBN.getText().isEmpty()&&au.getText().isEmpty()&&anno.getText().isEmpty()&&
+					gen.getText().isEmpty()&&qta.getText().isEmpty()&&tit.getText().isEmpty()&&
+					img.getText().isEmpty()))
+				return true;
+			else return false;
+		}
+		
+		
+		public void cercaLibro(Catalogo c) {
+	        // Assumi che txtTitoloCercato sia il JTextField in cui inserisci il titolo da cercare
+	        String titoloCercato = text_cerca.getText();
+
+	        // Ordina la lista con un Comparator personalizzato
+	        Collections.sort(c.getLista_libri(), new Comparator<Libro>() {
+	            @Override
+	            public int compare(Libro libro1, Libro libro2) {
+	                // Metti il libro cercato in cima
+	                if (titoloCercato.equalsIgnoreCase(libro1.getTitolo())) {
+	                    return -1; // libro1 viene prima di libro2
+	                } else if (titoloCercato.equalsIgnoreCase(libro2.getTitolo())) {
+	                    return 1; // libro2 viene prima di libro1
+	                } else {
+	                    // Ordina gli altri libri in modo normale
+	                    return libro1.getTitolo().compareToIgnoreCase(libro2.getTitolo());
+	                }
+	            }
+	        });
+	        
+	        // Ora la listaLibri � ordinata con il libro cercato in cima
+	        // Puoi fare qualcos'altro con la lista ordinata, ad esempio, aggiornare la GUI
+	    }
 }
+

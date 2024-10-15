@@ -85,13 +85,11 @@ public class SelezionaTabella {
 		   while(rsCred.next())
 		   {
 			   pren=rsCred.getString("libriprenotati");
-			   //backobj[numRighe][0]=rsInfo.getString("ISBN");
 		   }
 
 		   String[] str = pren.split(",");
 		   
 
-		   
 		   while(rsInfo.next())
 		   {
 			   for(int i=0;i<str.length;i++) 
@@ -105,14 +103,10 @@ public class SelezionaTabella {
 					   backobj[numRighe][3]=rsInfo.getString("genere");
 					   backobj[numRighe][4]=rsInfo.getString("annodipubblicazione");
 					   numRighe++;
-					   
 				   }
-			   }
-
-			   
+			   }	   
 		   }
-		   
-		   
+
 		   return backobj;
 	   }
 	   

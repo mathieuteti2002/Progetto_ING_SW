@@ -23,21 +23,21 @@ class JunitTestDoppi {
 
     @Test
     public void testEmailDuplicata() {
-        // Simula il caso in cui l'email esiste gi�
+        // Simula il caso in cui l'email esiste gia
         boolean risultato = registerUtente.doppi("mathteti@email.com", "math");
         assertFalse(risultato, "Dovrebbe restituire false quando l'email � gi� presente");
     }
 
     @Test
     public void testUtenteDuplicato() {
-        // Simula il caso in cui l'utente esiste gi�
+        // Simula il caso in cui l'utente esiste gia
         boolean risultato = registerUtente.doppi("riccardobonfanti@email.com", "riccardo");
         assertFalse(risultato, "Dovrebbe restituire false quando l'utente � gi� presente");
     }
 
     @Test
     public void testEmailEUtenteDuplicati() {
-        // Simula il caso in cui sia l'email che l'utente esistono gi�
+        // Simula il caso in cui sia l'email che l'utente esistono gia
         boolean risultato = registerUtente.doppi("emailesistente@email.com", "utenteesistente");
         assertFalse(risultato, "Dovrebbe restituire false quando sia l'email che l'utente sono gi� presenti");
     }

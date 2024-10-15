@@ -7,8 +7,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-	
-		//Se non va cambiate e mettere il vostro corrispettivo percorso di inforamzioni.db3
 		public static String DB_REL_FILE = ".\\db\\informazioni.db3";
 		public static String DB_URL = "jdbc:sqlite:" + DB_REL_FILE;
 		

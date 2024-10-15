@@ -12,7 +12,6 @@ public class UpdateIsLogged{
 
 	 
     private Connection connect() {
-        // SQLite connection string
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(Database.DB_URL);
@@ -43,7 +42,6 @@ public class UpdateIsLogged{
     }
     
     public void update(String utente, int islogged) {
-       // String sql = "UPDATE Account SET islogged=? WHERE utente=?";
         String sql = "UPDATE Account SET islogged = ? "
                 	+ "WHERE utente = ?";
 

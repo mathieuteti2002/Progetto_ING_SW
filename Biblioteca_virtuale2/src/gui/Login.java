@@ -155,7 +155,7 @@ public class Login extends JFrame {
 					islog.update(textFieldUser.getText(),1);
 					JOptionPane.showMessageDialog(null, "Benvenuto "+textFieldUser.getText()+"!");
 					dispose();
-					GuiBibliotecaUtente2.main(null);
+					GuiBibliotecaUtente.main(null);
 				}
 				else if(ricercaPassword(textFieldUser.getText(),textFieldPass.getText())==false)
 				{
@@ -216,12 +216,5 @@ public class Login extends JFrame {
 		lblNewLabel_2.setBounds(0, -39, 485, 480);
 		panel.add(lblNewLabel_2);
 		lblNewLabel_2.setIcon(new ImageIcon("src/Immagine/immagineLibroLogin.jpg"));
-				//("C:\\Users\\mathi\\Desktop\\Progetto SW\\Biblioteca_virtuale2\\src\\Immagine\\immagineLibroLogin.jpg"));
-		
-		
-		
-	
-
-		
 	}
 }

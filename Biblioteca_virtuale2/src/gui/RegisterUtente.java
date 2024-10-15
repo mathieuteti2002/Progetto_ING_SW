@@ -145,12 +145,7 @@ public class RegisterUtente extends JFrame {
 		
 		ImageIcon imgLibri=new ImageIcon("src/Immagine/Book_shelf_silhouette.jpg");
 		lblNewLabel_4.setIcon(imgLibri);
-		/*
-		Image img=imgLibri.getImage();
-		Image imgLibriResize = img.getScaledInstance(414, 428, DO_NOTHING_ON_CLOSE);
-		imgLibri = new ImageIcon(imgLibriResize);
-		lblNewLabel_4.setIcon(imgLibriResize);
-		*/
+
 		
 		Button BottoneRegistrazione = new Button("Registrazione");
 		BottoneRegistrazione.setBounds(421, 291, 177, 29);

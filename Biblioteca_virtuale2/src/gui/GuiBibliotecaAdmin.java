@@ -284,7 +284,7 @@ public class GuiBibliotecaAdmin extends JFrame {
 		panel_2.add(BottoneCerca);
 		
 		//---------------------------INSERISCO IMMAGINI + UPDATE ---------------------------------
-				//Ricarica(nuovocatalogo, panel,scrollPane,imagePanel);
+
       //------------------------BOTTONE INSERISCI NEW LIBRO ------------------------------------
 		
       		JButton btn_new_libro = new JButton("Inserisci");
@@ -589,11 +589,6 @@ public class GuiBibliotecaAdmin extends JFrame {
                     }
                 }); 
 			}
-            /*IN CASO DI PROBLEMI DI AGGIORNAMENTO DELLA GUI, COSI SI FORZA
-             * panel.revalidate();
-            panel.repaint();
-            scrollPane.revalidate();
-            scrollPane.repaint();*/
 	}
 	
 	public void Setta_button(Catalogo nuovocatalogo,JPanel panel, JScrollPane scrollPane,JPanel imagePanel) throws SQLException {

@@ -31,7 +31,6 @@ public class InserimentoDatabase {
 		String sql = "INSERT INTO libri(ISBN,titolo,autore,quantitadisponibile,genere,annodipubblicazione,copertina) VALUES(?,?,?,?,?,?,?);";
 
 		try(Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql))  {
-				//PROBLEMA: Inserimento da risultati di JFrame a tabella.
 				pstmt.setString(1, ISBN);
 				pstmt.setString(2, titolo);
 				pstmt.setString(3, autore);

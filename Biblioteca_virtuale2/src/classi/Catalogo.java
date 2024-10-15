@@ -62,12 +62,6 @@ public class Catalogo {
 	}
 
 	public void ordinaPerTitolo(Libro l) {
-       /* Collections.sort(lista_libri, new Comparator<Libro>() {
-            @Override
-            public int compare(Libro libro1, Libro libro2) {
-                return libro1.getTitolo().compareToIgnoreCase(libro2.getTitolo());
-            }
-        });*/
 		String titoloCercato =l.getTitolo();
         // Ordina la lista con un Comparator personalizzato
         Collections.sort(this.lista_libri, new Comparator<Libro>() {

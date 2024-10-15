@@ -46,7 +46,6 @@ public class SelezioneUtenza extends JFrame {
 		JLabel lblNewLabel = new JLabel("Scegliere il tipo di Utenza");
 		lblNewLabel.setBounds(138, 50, 368, 14);
 		contentPane.add(lblNewLabel);
-        //setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		JButton bottoneUtente = new JButton("Utente");
 		bottoneUtente.addActionListener(new ActionListener() {
