@@ -71,9 +71,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.GridBagLayout;
 import javax.swing.SpringLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
+
 
 public class GUI_bibliotecaAdmin extends JFrame {
 
