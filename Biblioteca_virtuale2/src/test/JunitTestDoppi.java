@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import GUI.RegisterUtente;
+import gui.RegisterUtente;
 
 class JunitTestDoppi {
     private RegisterUtente registerUtente;
@@ -23,23 +23,23 @@ class JunitTestDoppi {
 
     @Test
     public void testEmailDuplicata() {
-        // Simula il caso in cui l'email esiste già
+        // Simula il caso in cui l'email esiste giï¿½
         boolean risultato = registerUtente.doppi("mathteti@email.com", "math");
-        assertFalse(risultato, "Dovrebbe restituire false quando l'email è già presente");
+        assertFalse(risultato, "Dovrebbe restituire false quando l'email ï¿½ giï¿½ presente");
     }
 
     @Test
     public void testUtenteDuplicato() {
-        // Simula il caso in cui l'utente esiste già
+        // Simula il caso in cui l'utente esiste giï¿½
         boolean risultato = registerUtente.doppi("riccardobonfanti@email.com", "riccardo");
-        assertFalse(risultato, "Dovrebbe restituire false quando l'utente è già presente");
+        assertFalse(risultato, "Dovrebbe restituire false quando l'utente ï¿½ giï¿½ presente");
     }
 
     @Test
     public void testEmailEUtenteDuplicati() {
-        // Simula il caso in cui sia l'email che l'utente esistono già
+        // Simula il caso in cui sia l'email che l'utente esistono giï¿½
         boolean risultato = registerUtente.doppi("emailesistente@email.com", "utenteesistente");
-        assertFalse(risultato, "Dovrebbe restituire false quando sia l'email che l'utente sono già presenti");
+        assertFalse(risultato, "Dovrebbe restituire false quando sia l'email che l'utente sono giï¿½ presenti");
     }
 
 }

@@ -6,15 +6,15 @@ import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
-import GUI.GUI_bibliotecaUtente;
+import gui.GuiBibliotecaUtente;
 
 class JunitTestTrovaLoggato {
 
-	private GUI_bibliotecaUtente guiBibliotecaUtente;
+	private GuiBibliotecaUtente guiBibliotecaUtente;
 
     public void setUp() {
         try {
-			guiBibliotecaUtente = new GUI_bibliotecaUtente();
+			guiBibliotecaUtente = new GuiBibliotecaUtente();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,23 +23,23 @@ class JunitTestTrovaLoggato {
 
     @Test
     public void testUtenteLoggato() {
-        // Simula il caso in cui un utente è attualmente loggato
+        // Simula il caso in cui un utente ï¿½ attualmente loggato
         String utenteLoggato = guiBibliotecaUtente.trovaloggato();
         assertEquals("utente1", utenteLoggato, "Dovrebbe restituire 'utente1' come utente loggato");
     }
 
     @Test
     public void testUltimoUtenteLoggato() {
-        // Simula il caso in cui nessun utente è attualmente loggato, ma l'ultimo loggato ha isLogged = 1
+        // Simula il caso in cui nessun utente ï¿½ attualmente loggato, ma l'ultimo loggato ha isLogged = 1
         String utenteLoggato = guiBibliotecaUtente.trovaloggato();
-        assertEquals("ultimoUtenteLoggato", utenteLoggato, "Dovrebbe restituire 'ultimoUtenteLoggato' se nessun utente è attualmente loggato");
+        assertEquals("ultimoUtenteLoggato", utenteLoggato, "Dovrebbe restituire 'ultimoUtenteLoggato' se nessun utente ï¿½ attualmente loggato");
     }
 
     @Test
     public void testNessunUtenteLoggato() {
-        // Simula il caso in cui non ci sono utenti loggati e l'ultimo loggato non è disponibile
+        // Simula il caso in cui non ci sono utenti loggati e l'ultimo loggato non ï¿½ disponibile
         String utenteLoggato = guiBibliotecaUtente.trovaloggato();
-        assertEquals("", utenteLoggato, "Dovrebbe restituire una stringa vuota se nessun utente è loggato");
+        assertEquals("", utenteLoggato, "Dovrebbe restituire una stringa vuota se nessun utente ï¿½ loggato");
     }
 
 

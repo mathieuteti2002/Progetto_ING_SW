@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import GUI.Login;
+import gui.Login;
 
 class JunitTestLogin {
 	private Login login;
